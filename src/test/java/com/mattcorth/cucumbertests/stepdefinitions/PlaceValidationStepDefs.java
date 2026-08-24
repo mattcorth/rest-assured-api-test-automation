@@ -1,5 +1,6 @@
 package com.mattcorth.cucumbertests.stepdefinitions;
 
+import com.mattcorth.cucumbertests.resources.APIResource;
 import com.mattcorth.cucumbertests.resources.TestDataBuild;
 import com.mattcorth.cucumbertests.resources.Utils;
 import io.cucumber.java.en.Given;
@@ -30,16 +31,17 @@ public class PlaceValidationStepDefs extends Utils {
                 .spec(requestSpecification())
                 .body(data.addPlacePayload(name, language, address));
     }
-    @When("user calls {string} with Post http request")
-    public void user_calls_with_post_http_request(String string) {
+    @When("user calls {string} with {string} http request")
+    public void user_calls_with_http_request(String resource, String restVerb) {
+        APIResource r = APIResource.valueOf(resource);
+
         resspec = new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .expectContentType(ContentType.JSON)
                 .build();
-        response = res.when().post("/maps/api/place/add/json")
+        response = res.when().post(r.getEndpoint())
                 .then()
                     .spec(resspec)
-                    .log().all()
                     .extract().response();
     }
     @Then("the API call is successful")
