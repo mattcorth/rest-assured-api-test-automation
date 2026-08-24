@@ -10,17 +10,21 @@ import java.io.*;
 import java.util.Properties;
 
 public class Utils {
-    RequestSpecification req;
+    public static RequestSpecification req;
 
     public RequestSpecification requestSpecification() throws IOException {
-        PrintStream log = new PrintStream(new FileOutputStream("logging.txt"));
+        // The request specification should only be created once,
+        //   otherwise, the file gets overwritten every time
+        if (req == null) {
+            PrintStream log = new PrintStream(new FileOutputStream("logging.txt"));
 
-        req = new RequestSpecBuilder()
-                .setBaseUri(Utils.getGlobalValue("baseUrl"))
-                .addQueryParam("key", "qaclick123")
-                .addFilter(RequestLoggingFilter.logRequestTo(log))
-                .addFilter(ResponseLoggingFilter.logResponseTo(log))
-                .setContentType(ContentType.JSON).build();
+            req = new RequestSpecBuilder()
+                    .setBaseUri(Utils.getGlobalValue("baseUrl"))
+                    .addQueryParam("key", "qaclick123")
+                    .addFilter(RequestLoggingFilter.logRequestTo(log))
+                    .addFilter(ResponseLoggingFilter.logResponseTo(log))
+                    .setContentType(ContentType.JSON).build();
+        }
 
         return req;
     }
