@@ -2,6 +2,8 @@ package com.mattcorth.cucumbertests.stepdefinitions;
 
 import com.mattcorth.cucumbertests.pojos.AddPlace;
 import com.mattcorth.cucumbertests.pojos.Location;
+import com.mattcorth.cucumbertests.resources.TestDataBuild;
+import com.mattcorth.cucumbertests.resources.Utils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,50 +16,26 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
-public class PlaceValidationStepDefs {
+public class PlaceValidationStepDefs extends Utils {
     RequestSpecification res;
     ResponseSpecification resspec;
     Response response;
-    //TestDataBuild data =new TestDataBuild();
+    TestDataBuild data =new TestDataBuild();
     static String place_id;
 
     @Given("add place payload")
     public void add_place_payload() {
-        RestAssured.baseURI = "https://rahulshettyacademy.com";
-
-        AddPlace p =  new AddPlace();
-        p.setAccuracy(50);
-        p.setAddress("29, side layout, cohen 09");
-        p.setLanguage("French-IN");
-        p.setPhoneNumber("(+91) 983 893 3937");
-        p.setWebsite("https://rahulshettyacademy.com");
-        p.setName("Frontline house");
-        List<String> myList = new ArrayList<String>();
-        myList.add("shoe park");
-        myList.add("shop");
-
-        p.setTypes(myList);
-        Location l = new Location();
-        l.setLat(-38.383494);
-        l.setLng(33.427362);
-        p.setLocation(l);
-
-        RequestSpecification req = new RequestSpecBuilder()
-                .setBaseUri("https://rahulshettyacademy.com")
-                .addQueryParam("key", "qaclick123")
-                .setContentType(ContentType.JSON).build();
 
         resspec = new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .expectContentType(ContentType.JSON)
                 .build();
 
-        res = RestAssured.given().spec(req).body(p);
+        res = RestAssured.given()
+                .spec(requestSpecification())
+                .body(data.addPlacePayload());
     }
     @When("user calls {string} with Post http request")
     public void user_calls_with_post_http_request(String string) {
