@@ -24,11 +24,11 @@ public class PlaceValidationStepDefs extends Utils {
     TestDataBuild data =new TestDataBuild();
     static String place_id;
 
-    @Given("add place payload")
-    public void add_place_payload() throws IOException {
+    @Given("add place payload with {string} {string} {string}")
+    public void add_place_payload_with(String name, String language, String address) throws IOException {
         res = RestAssured.given()
                 .spec(requestSpecification())
-                .body(data.addPlacePayload());
+                .body(data.addPlacePayload(name, language, address));
     }
     @When("user calls {string} with Post http request")
     public void user_calls_with_post_http_request(String string) {
