@@ -21,7 +21,9 @@ public class PlaceValidationStepDefs extends Utils {
     RequestSpecification res;
     ResponseSpecification resspec;
     Response response;
-    TestDataBuild data =new TestDataBuild();
+    TestDataBuild data = new TestDataBuild();
+    // Static means the data will persist between Cucumber scenarios
+    static String placeId;
 
     @Given("add place payload with {string} {string} {string}")
     public void add_place_payload_with(String name, String language, String address) throws IOException {
@@ -43,8 +45,8 @@ public class PlaceValidationStepDefs extends Utils {
         else if (method.equalsIgnoreCase("GET"))
             response = res.when().get(r.getEndpoint());
     }
-    @Then("the API call is successful")
-    public void the_api_call_is_successful() {
+    @Then("the API call was successful with status code {int}")
+    public void the_api_call_was_successful_with_status_code(Integer int1) {
         assertEquals(200,response.getStatusCode());
     }
     @Then("{string} in response body is {string}")
@@ -54,10 +56,18 @@ public class PlaceValidationStepDefs extends Utils {
 
     @Then("verify that created place_Id maps to {string} using {string}")
     public void verify_that_created_place_id_maps_to_using(String expectedName, String resource) throws IOException {
-        String placeId = getJsonPath(response, "place_id");
+        placeId = getJsonPath(response, "place_id");
         res = RestAssured.given().spec(requestSpecification()).queryParam("place_id", placeId);
         user_calls_with_http_request(resource, "GET");
         String actualName = getJsonPath(response, "name");
         assertEquals(expectedName, actualName);
+    }
+
+    @Given("DeletePlace payload")
+    public void delete_place_payload() throws IOException {
+        res = RestAssured
+                .given()
+                    .spec(requestSpecification())
+                    .body(data.deletePlacePayload(placeId));
     }
 }
