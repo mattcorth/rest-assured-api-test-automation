@@ -32,17 +32,18 @@ public class PlaceValidationStepDefs extends Utils {
                 .body(data.addPlacePayload(name, language, address));
     }
     @When("user calls {string} with {string} http request")
-    public void user_calls_with_http_request(String resource, String restVerb) {
+    public void user_calls_with_http_request(String resource, String method) {
         APIResource r = APIResource.valueOf(resource);
 
         resspec = new ResponseSpecBuilder()
                 .expectStatusCode(200)
                 .expectContentType(ContentType.JSON)
                 .build();
-        response = res.when().post(r.getEndpoint())
-                .then()
-                    .spec(resspec)
-                    .extract().response();
+
+        if (method.equalsIgnoreCase("POST"))
+            response = res.when().post(r.getEndpoint());
+        else if (method.equalsIgnoreCase("GET"))
+            response = res.when().get(r.getEndpoint());
     }
     @Then("the API call is successful")
     public void the_api_call_is_successful() {
