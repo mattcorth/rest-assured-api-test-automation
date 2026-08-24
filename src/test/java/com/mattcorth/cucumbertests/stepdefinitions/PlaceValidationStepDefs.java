@@ -1,14 +1,11 @@
 package com.mattcorth.cucumbertests.stepdefinitions;
 
-import com.mattcorth.cucumbertests.pojos.AddPlace;
-import com.mattcorth.cucumbertests.pojos.Location;
 import com.mattcorth.cucumbertests.resources.TestDataBuild;
 import com.mattcorth.cucumbertests.resources.Utils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
@@ -16,7 +13,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +25,7 @@ public class PlaceValidationStepDefs extends Utils {
     static String place_id;
 
     @Given("add place payload")
-    public void add_place_payload() throws FileNotFoundException {
+    public void add_place_payload() throws IOException {
         res = RestAssured.given()
                 .spec(requestSpecification())
                 .body(data.addPlacePayload());
