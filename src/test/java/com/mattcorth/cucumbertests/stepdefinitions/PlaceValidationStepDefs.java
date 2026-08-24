@@ -16,6 +16,8 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
+import java.io.FileNotFoundException;
+
 import static org.junit.Assert.assertEquals;
 
 public class PlaceValidationStepDefs extends Utils {
@@ -26,19 +28,17 @@ public class PlaceValidationStepDefs extends Utils {
     static String place_id;
 
     @Given("add place payload")
-    public void add_place_payload() {
-
-        resspec = new ResponseSpecBuilder()
-                .expectStatusCode(200)
-                .expectContentType(ContentType.JSON)
-                .build();
-
+    public void add_place_payload() throws FileNotFoundException {
         res = RestAssured.given()
                 .spec(requestSpecification())
                 .body(data.addPlacePayload());
     }
     @When("user calls {string} with Post http request")
     public void user_calls_with_post_http_request(String string) {
+        resspec = new ResponseSpecBuilder()
+                .expectStatusCode(200)
+                .expectContentType(ContentType.JSON)
+                .build();
         response = res.when().post("/maps/api/place/add/json")
                 .then()
                     .spec(resspec)
