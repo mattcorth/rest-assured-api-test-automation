@@ -6,6 +6,7 @@ Feature: Validating place APIs
     Then the API call is successful
     And "status" in response body is "OK"
     And "scope" in response body is "APP"
+    And verify that created place_Id maps to "<name>" using "getPlaceAPI"
 
     Examples:
     | name            | language  | address                   |

@@ -9,7 +9,6 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
@@ -23,7 +22,6 @@ public class PlaceValidationStepDefs extends Utils {
     ResponseSpecification resspec;
     Response response;
     TestDataBuild data =new TestDataBuild();
-    static String place_id;
 
     @Given("add place payload with {string} {string} {string}")
     public void add_place_payload_with(String name, String language, String address) throws IOException {
@@ -51,8 +49,15 @@ public class PlaceValidationStepDefs extends Utils {
     }
     @Then("{string} in response body is {string}")
     public void in_response_body_is(String key, String expected) {
-        String resp = response.asString();
-        JsonPath js = new JsonPath(resp);
-        assertEquals(expected, js.get(key).toString());
+        assertEquals(expected, getJsonPath(response, key));
+    }
+
+    @Then("verify that created place_Id maps to {string} using {string}")
+    public void verify_that_created_place_id_maps_to_using(String expectedName, String resource) throws IOException {
+        String placeId = getJsonPath(response, "place_id");
+        res = RestAssured.given().spec(requestSpecification()).queryParam("place_id", placeId);
+        user_calls_with_http_request(resource, "GET");
+        String actualName = getJsonPath(response, "name");
+        assertEquals(expectedName, actualName);
     }
 }
