@@ -33,7 +33,7 @@ public class Utils {
 
     public static String getGlobalValue(String key) throws IOException {
         Properties prop = new Properties();
-        FileInputStream fis = new FileInputStream("C:\\Users\\mattc\\Documents\\HMLR\\Udemy\\Rest API Test Automation from Scratch - Rest Assured Java\\rest-assured-api-test-automation\\src\\test\\resources\\global.properties");
+        FileInputStream fis = new FileInputStream("C:\\Users\\mattc\\Documents\\HMLR\\Udemy\\Rest-API-Test-Automation-from-Scratch-Rest-Assured-Java\\rest-assured-api-test-automation\\src\\test\\resources\\global.properties");
         prop.load(fis);
         return prop.getProperty(key);
     }
