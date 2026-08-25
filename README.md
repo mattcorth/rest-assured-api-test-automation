@@ -21,3 +21,18 @@ Please use individual properties instead. See the java doc on io.cucumber.core.o
 Check out these resources for more information:
 - https://javadoc.io/doc/io.cucumber/cucumber-core/latest/io/cucumber/core/options/Constants.html
 - https://github.com/cucumber/cucumber-jvm-starter-maven-java
+
+### Generating reports
+#### Set up your code for reports
+1. Go to [maven-cucumber-reporting](https://github.com/damianszczepanik/maven-cucumber-reporting) repo
+2. Copy the full code block and paste it into your _pom.xml_ file, above your dependencies
+
+The line `<inputDirectory>${project.build.directory}/jsonReports</inputDirectory>` means that it is expecting a JSON file as an input, this will be done in step 3. The file should be located in `target/jsonReports/`
+
+3. Configure test runner to generate a JSON report: `plugin="json:target/jsonReports/cucumber-report.json"`
+
+#### Generate the reports
+The report generation is set to occur in the verify phase of maven
+1. `cd` into project folder
+2. Run the command `mvn test verify`
+3. Results will be found in target folder
